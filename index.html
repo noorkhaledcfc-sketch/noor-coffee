@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قهوة نور | القائمة الإلكترونية والطلبات</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        espresso: '#1A1512',
+                        coffee: '#2C221E',
+                        warmbrown: '#3E2723',
+                        gold: '#D4AF37',
+                        goldlight: '#F3E5AB',
+                        cream: '#FAF6F0',
+                        terracotta: '#A9442A',
+                        sage: '#2E5A44'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar & Cup Pattern */
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #FAF6F0;
+            color: #1A1512;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Subtle geometric pattern inspired by Noor Coffee Cup */
+        .cup-pattern {
+            background-color: #1A1512;
+            background-image: 
+                linear-gradient(30deg, #251E1A 12%, transparent 12.5%, transparent 87%, #251E1A 87.5%, #251E1A),
+                linear-gradient(150deg, #251E1A 12%, transparent 12.5%, transparent 87%, #251E1A 87.5%, #251E1A),
+                linear-gradient(30deg, #251E1A 12%, transparent 12.5%, transparent 87%, #251E1A 87.5%, #251E1A),
+                linear-gradient(150deg, #251E1A 12%, transparent 12.5%, transparent 87%, #251E1A 87.5%, #251E1A),
+                linear-gradient(60deg, #2F262177 25%, transparent 25.5%, transparent 75%, #2F262177 75%, #2F262177);
+            background-size: 40px 70px;
+            background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        @keyframes pulse-gold {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(212, 175, 55, 0); }
+        }
+        .animate-pulse-gold {
+            animation: pulse-gold 2.5s infinite;
+        }
+    </style>
+</head>
+<body class="pb-28 select-none">
+
+    <!-- Top Hero Header (Inspired by Logo & Cup) -->
+    <header class="cup-pattern text-cream relative overflow-hidden rounded-b-3xl shadow-2xl border-b-4 border-gold">
+        <!-- Top Utility Bar -->
+        <div class="max-w-3xl mx-auto px-4 pt-3 flex justify-between items-center text-xs text-goldlight/80">
+            <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                مفتوح الآن للطلبات
+            </span>
+            <button onclick="openQrModal()" class="bg-white/10 hover:bg-white/20 text-gold border border-gold/40 px-3 py-1.5 rounded-full flex items-center gap-1.5 transition active:scale-95">
+                <i class="fa-solid fa-qrcode"></i>
+                <span>رمز QR للمتجر</span>
+            </button>
+        </div>
+
+        <!-- Brand Showcase -->
+        <div class="max-w-3xl mx-auto px-4 pt-4 pb-7 flex flex-col items-center text-center">
+            
+            <!-- Custom Vintage Circular Badge Logo (Recreating the Wall Sticker & Cup) -->
+            <div class="relative w-32 h-32 sm:w-36 sm:h-36 mb-3 drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]">
+                <svg viewBox="0 0 220 220" class="w-full h-full">
+                    <!-- Outer Terracotta & Gold Ring -->
+                    <circle cx="110" cy="110" r="104" fill="#A9442A" stroke="#D4AF37" stroke-width="4"/>
+                    <circle cx="110" cy="110" r="82" fill="#F3E5AB" stroke="#1A1512" stroke-width="2.5"/>
+                    
+                    <!-- Sunburst Rays -->
+                    <g stroke="#D4AF37" stroke-width="1.5" opacity="0.6">
+                        <line x1="110" y1="28" x2="110" y2="192"/>
+                        <line x1="28" y1="110" x2="192" y2="110"/>
+                        <line x1="52" y1="52" x2="168" y2="168"/>
+                        <line x1="168" y1="52" x2="52" y2="168"/>
+                        <line x1="72" y1="36" x2="148" y2="184"/>
+                        <line x1="148" y1="36" x2="72" y2="184"/>
+                    </g>
+
+                    <!-- Circular Text Path -->
+                    <defs>
+                        <path id="topArc" d="M 24,110 A 86,86 0 1,1 196,110" />
+                        <path id="bottomArc" d="M 196,110 A 86,86 0 1,1 24,110" />
+                    </defs>
+                    <text fill="#F3E5AB" font-size="11.5" font-weight="800" letter-spacing="1.5">
+                        <textPath href="#topArc" startOffset="50%" text-anchor="middle">• BEST TURKISH COFFEE •</textPath>
+                    </text>
+                    <text fill="#F3E5AB" font-size="11" font-weight="800" letter-spacing="1.2">
+                        <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">• قهوة نور • ESTD 2024 •</textPath>
+                    </text>
+
+                    <!-- Stylized Coffee Cup (Sage Green & Gold) -->
+                    <path d="M 80,78 L 140,78 L 132,152 C 132,158 88,158 88,152 Z" fill="#2E5A44" stroke="#1A1512" stroke-width="3"/>
+                    <!-- Cup Lid -->
+                    <rect x="75" y="68" width="70" height="10" rx="4" fill="#3E2723" stroke="#1A1512" stroke-width="2.5"/>
+                    <rect x="82" y="60" width="56" height="8" rx="3" fill="#A9442A" stroke="#1A1512" stroke-width="2"/>
+                    <!-- Stirrer / Spoon -->
+                    <rect x="88" y="42" width="6" height="20" rx="2" transform="rotate(-15 88 42)" fill="#3E2723" stroke="#1A1512" stroke-width="2"/>
+
+                    <!-- ESTD & 2024 -->
+                    <text x="54" y="106" fill="#1A1512" font-size="9.5" font-weight="900" text-anchor="middle">ESTD</text>
+                    <text x="166" y="106" fill="#1A1512" font-size="9.5" font-weight="900" text-anchor="middle">2024</text>
+
+                    <!-- Arabic Brand Name Ribbon -->
+                    <rect x="44" y="92" width="132" height="26" rx="13" fill="#FAF6F0" stroke="#1A1512" stroke-width="2.5"/>
+                    <text x="110" y="111" fill="#1A1512" font-size="19" font-weight="900" text-anchor="middle">قهوة نور</text>
+
+                    <!-- Phone Ribbon -->
+                    <polygon points="42,124 178,124 185,134 178,144 42,144 35,134" fill="#A9442A" stroke="#1A1512" stroke-width="2"/>
+                    <text x="110" y="138" fill="#F3E5AB" font-size="13" font-weight="800" letter-spacing="1" text-anchor="middle">0788492145</text>
+                </svg>
+            </div>
+
+            <!-- Cup Design Tribute Tagline -->
+            <div class="inline-flex items-center gap-2 bg-espresso/90 border border-gold/50 px-3.5 py-1 rounded-full text-xs text-gold mb-2">
+                <i class="fa-solid fa-mug-hot"></i>
+                <span>نكهة الأصالة • قهوة ومخبوزات</span>
+            </div>
+            
+            <h1 class="text-2xl sm:text-3xl font-black tracking-wide text-white">قهوة نور <span class="text-gold text-lg font-bold block sm:inline">(Noor Coffee)</span></h1>
+            <p class="text-cream/80 text-xs sm:text-sm mt-1 max-w-md">أطيب قهوة تركية، مشروبات ساخنة وباردة، وسناكات طازجة يومياً</p>
+
+            <!-- Direct Contact Action Buttons (Call & WhatsApp) -->
+            <div class="grid grid-cols-2 gap-3 w-full max-w-md mt-5">
+                <a href="tel:0788492145" class="flex items-center justify-center gap-2 bg-gold hover:bg-yellow-500 text-espresso font-extrabold py-3 px-4 rounded-2xl shadow-lg transition transform active:scale-95">
+                    <i class="fa-solid fa-phone-volume text-lg"></i>
+                    <span>اتصال مباشر</span>
+                </a>
+                <a href="https://wa.me/962788492145?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%82%D9%87%D9%88%D8%A9%20%D9%86%D9%88%D8%B1%D8%8C%20%D8%A8%D8%AF%D9%8A%20%D8%A3%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%20%D8%B9%D9%86%D8%AF%D9%83%D9%85" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold py-3 px-4 rounded-2xl shadow-lg transition transform active:scale-95">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    <span>واتساب سريع</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sticky Search & Category Filter Bar -->
+    <div class="sticky top-0 z-30 bg-cream/95 backdrop-blur-md border-b border-stone-200/80 shadow-sm">
+        <div class="max-w-3xl mx-auto px-4 py-3 space-y-2.5">
+            <!-- Search Input -->
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400"></i>
+                <input type="text" id="searchInput" oninput="filterMenu()" placeholder="ابحث عن مشروبك المفضل (تركي، نسكافيه، رد بول، كرواسون...)" class="w-full bg-white border border-stone-200 focus:border-gold focus:ring-2 focus:ring-gold/20 rounded-xl py-2.5 pr-10 pl-4 text-sm outline-none transition">
+                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-espresso p-1">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Category Tabs -->
+            <div class="flex gap-2 overflow-x-auto no-scrollbar pb-0.5" id="categoryTabs">
+                <button onclick="setCategory('all')" data-cat="all" class="cat-btn active shrink-0 px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-espresso text-gold border border-espresso transition">
+                    الكل (37)
+                </button>
+                <button onclick="setCategory('hot')" data-cat="hot" class="cat-btn shrink-0 px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-stone-700 border border-stone-200 hover:border-gold transition">
+                    ☕ المشروبات الساخنة
+                </button>
+                <button onclick="setCategory('cold')" data-cat="cold" class="cat-btn shrink-0 px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-stone-700 border border-stone-200 hover:border-gold transition">
+                    🧊 المشروبات الباردة
+                </button>
+                <button onclick="setCategory('snacks')" data-cat="snacks" class="cat-btn shrink-0 px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-stone-700 border border-stone-200 hover:border-gold transition">
+                    🥐 وجبات خفيفة
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Menu Grid -->
+    <main class="max-w-3xl mx-auto px-4 pt-5">
+        <div id="menuContainer" class="space-y-7">
+            <!-- Menu sections will be injected dynamically by JS -->
+        </div>
+
+        <!-- Empty Search State -->
+        <div id="emptyState" class="hidden text-center py-12">
+            <div class="w-16 h-16 bg-stone-200/70 rounded-full flex items-center justify-center mx-auto mb-3 text-stone-500 text-2xl">
+                <i class="fa-solid fa-mug-saucer"></i>
+            </div>
+            <h3 class="font-bold text-lg text-espresso">لم نجد هذا الصنف!</h3>
+            <p class="text-sm text-stone-500 mt-1">جرب البحث بكلمة أخرى أو تصفح جميع الأقسام</p>
+            <button onclick="clearSearch()" class="mt-4 bg-espresso text-gold px-5 py-2 rounded-xl text-sm font-bold">عرض كل القائمة</button>
+        </div>
+
+        <!-- Store Footer -->
+        <footer class="mt-12 pt-6 border-t border-stone-200 text-center text-xs text-stone-500 space-y-2">
+            <p class="font-bold text-espresso text-sm">قهوة نور • طعم القهوة على أصولها</p>
+            <p>للطلبات والاستفسارات: <a href="tel:0788492145" class="text-warmbrown font-bold underline">0788492145</a></p>
+            <p class="text-[11px] text-stone-400">جميع الأسعار بالدينار الأردني والقرش</p>
+        </footer>
+    </main>
+
+    <!-- Floating Bottom Cart Bar -->
+    <div id="floatingCartBar" class="fixed bottom-4 inset-x-0 z-40 px-4 transition-all duration-300 translate-y-28 opacity-0 pointer-events-none">
+        <div class="max-w-3xl mx-auto">
+            <button onclick="openCartModal()" class="w-full bg-espresso hover:bg-coffee text-white rounded-2xl p-3.5 shadow-2xl border-2 border-gold flex items-center justify-between animate-pulse-gold transition active:scale-[0.99]">
+                <div class="flex items-center gap-3">
+                    <div class="relative bg-gold text-espresso w-11 h-11 rounded-xl flex items-center justify-center font-black text-lg">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                        <span id="cartBadgeCount" class="absolute -top-2 -right-2 bg-terracotta text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold border border-white">0</span>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-extrabold text-sm sm:text-base text-gold">عرض سلة الطلبات</p>
+                        <p id="cartSubSummary" class="text-xs text-cream/80">اضغط لإرسال الطلب عبر واتساب</p>
+                    </div>
+                </div>
+                <div class="text-left bg-white/10 px-3.5 py-2 rounded-xl border border-white/10">
+                    <span class="text-[11px] text-goldlight block">المجموع</span>
+                    <span id="cartTotalDisplay" class="font-black text-base sm:text-lg text-white">0 قرش</span>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Cart & Checkout Modal -->
+    <div id="cartModal" class="fixed inset-0 z-50 hidden">
+        <!-- Backdrop -->
+        <div onclick="closeCartModal()" class="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity"></div>
+        
+        <!-- Bottom Sheet / Modal Container -->
+        <div class="absolute bottom-0 inset-x-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 w-full sm:max-w-lg bg-cream rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden border-t-4 border-gold">
+            <!-- Modal Header -->
+            <div class="bg-espresso text-white px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-receipt text-gold text-xl"></i>
+                    <h2 class="font-black text-lg">تفاصيل طلبك من قهوة نور</h2>
+                </div>
+                <button onclick="closeCartModal()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-5 overflow-y-auto space-y-5 flex-1">
+                <!-- Selected Items List -->
+                <div>
+                    <div class="flex justify-between items-center mb-2.5">
+                        <span class="text-xs font-bold text-stone-500">الأصناف المختارة</span>
+                        <button onclick="clearCart()" class="text-xs text-terracotta hover:underline font-bold">إفراغ السلة</button>
+                    </div>
+                    <div id="cartItemsList" class="space-y-2.5">
+                        <!-- Cart items injected here -->
+                    </div>
+                </div>
+
+                <!-- Customer Details & Notes -->
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 space-y-3">
+                    <h3 class="font-bold text-sm text-espresso flex items-center gap-1.5">
+                        <i class="fa-solid fa-pen-to-square text-gold"></i>
+                        معلومات إضافية للطلب (اختياري)
+                    </h3>
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-600 mb-1">الاسم أو مكان التوصيل / الاستلام</label>
+                        <input type="text" id="customerName" placeholder="مثال: أحمد - بجانب البوابة / استلام من الكشك" class="w-full bg-cream/60 border border-stone-200 focus:border-gold rounded-xl px-3.5 py-2 text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-600 mb-1">ملاحظات التحضير (السكر، الإضافات، النكهة)</label>
+                        <textarea id="orderNotes" rows="2" placeholder="مثال: القهوة وسط، إندومي خضار..." class="w-full bg-cream/60 border border-stone-200 focus:border-gold rounded-xl px-3.5 py-2 text-sm outline-none resize-none"></textarea>
+                    </div>
+                </div>
+
+                <!-- Order Total Breakdown -->
+                <div class="bg-espresso/5 border border-espresso/15 rounded-2xl p-4 space-y-1.5">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-stone-600">عدد الأصناف:</span>
+                        <span id="modalTotalItems" class="font-bold text-espresso">0</span>
+                    </div>
+                    <div class="flex justify-between text-base font-black pt-1.5 border-t border-stone-200">
+                        <span class="text-espresso">المجموع الكلي:</span>
+                        <span id="modalTotalPrice" class="text-terracotta text-lg">0 قرش</span>
+                    </div>
+                    <p id="customPriceNotice" class="hidden text-[11px] text-amber-700 bg-amber-100/80 px-2.5 py-1 rounded-lg mt-1">
+                        * ملاحظة: يحتوي طلبك على صنف "يُحدد سعره عند الطلب" وسيتم تأكيده معك.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Modal Footer Actions -->
+            <div class="p-4 bg-white border-t border-stone-200 space-y-2.5">
+                <button onclick="sendOrderWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-3.5 px-4 rounded-2xl shadow-lg flex items-center justify-center gap-2.5 text-base transition active:scale-98">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                    <span>إرسال الطلب عبر واتساب</span>
+                </button>
+                <a href="tel:0788492145" class="w-full bg-espresso hover:bg-coffee text-gold font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 text-sm transition">
+                    <i class="fa-solid fa-phone"></i>
+                    <span>أو اتصل مباشرة: 0788492145</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Modal (For Printing & Scanning) -->
+    <div id="qrModal" class="fixed inset-0 z-50 hidden">
+        <div onclick="closeQrModal()" class="absolute inset-0 bg-black/75 backdrop-blur-sm"></div>
+        <div class="relative z-10 max-w-sm mx-auto mt-16 bg-cream rounded-3xl overflow-hidden shadow-2xl border-4 border-gold m-4">
+            <div class="cup-pattern p-5 text-center text-white relative">
+                <button onclick="closeQrModal()" class="absolute top-3 left-3 w-8 h-8 rounded-full bg-white/15 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <h3 class="font-black text-xl text-gold">امسح الرمز لفتح المنيو</h3>
+                <p class="text-xs text-cream/80 mt-1">قهوة نور • 0788492145</p>
+            </div>
+            <div class="p-6 flex flex-col items-center text-center bg-white">
+                <div class="p-3 bg-white border-2 border-espresso rounded-2xl shadow-md mb-4">
+                    <img id="qrImage" src="" alt="QR Code قهوة نور" class="w-48 h-48 object-contain" onerror="this.src='https://placehold.co/200x200/1A1512/D4AF37?text=Noor+Coffee+QR'">
+                </div>
+                <p class="text-xs text-stone-600 leading-relaxed mb-4">
+                    وجّه كاميرا الهاتف نحو الرمز للدخول مباشرة إلى قائمة <strong>قهوة نور</strong> والطلب عبر الواتساب أو الاتصال.
+                </p>
+                <div class="flex gap-2 w-full">
+                    <button onclick="copyStoreLink()" class="flex-1 bg-espresso text-gold font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 active:scale-95 transition">
+                        <i class="fa-solid fa-link"></i>
+                        <span id="copyLinkText">نسخ رابط المتجر</span>
+                    </button>
+                    <button onclick="window.print()" class="bg-stone-200 hover:bg-stone-300 text-espresso font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition">
+                        <i class="fa-solid fa-print"></i>
+                        <span>طباعة</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-espresso text-gold border border-gold px-4 py-2.5 rounded-full shadow-xl text-xs font-bold flex items-center gap-2 transition-all duration-300 opacity-0 -translate-y-10 pointer-events-none">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toastMsg">تمت الإضافة للسلة</span>
+    </div>
+
+    <script>
+        // Complete Menu Database for قهوة نور (Noor Coffee)
+        const menuItems = [
+            // 1. المشروبات الساخنة (Hot Drinks)
+            { id: 'h1', category: 'hot', name: 'قهوة تركي عميد', price: 60, desc: 'قهوة العميد الفاخرة محضرة على أصولها', icon: '☕' },
+            { id: 'h2', category: 'hot', name: 'قهوة تركي معروف', price: 50, desc: 'قهوة معروف بنكهتها الأصيلة والغنية', icon: '☕' },
+            { id: 'h3', category: 'hot', name: 'قهوة تركي فخر الدين', price: 50, desc: 'تحميصة فخر الدين المميزة', icon: '☕' },
+            { id: 'h4', category: 'hot', name: 'نسكافيه 3in1', price: 50, desc: 'سريع التحضير بقوام كريمي متوازن', icon: '🥤' },
+            { id: 'h5', category: 'hot', name: 'كابتشينو قود دي', price: 50, desc: 'رغوة غنية ونكهة كابتشينو مميزة', icon: '🧋' },
+            { id: 'h6', category: 'hot', name: 'كابتشينو تالين', price: 50, desc: 'كابتشينو تالين الدافئ برغوة كثيفة', icon: '🧋' },
+            { id: 'h7', category: 'hot', name: 'هوت شوكلت', price: 50, desc: 'شوكولاتة ساخنة غنية ودافئة', icon: '🍫' },
+            { id: 'h8', category: 'hot', name: 'نسكافيه 2in1', price: 50, desc: 'قهوة ومبيض بدون سكر مضاف', icon: '☕' },
+            { id: 'h9', category: 'hot', name: 'بلاك (قهوة سادة)', price: 50, desc: 'قهوة سوداء مركزة لعشاق القهوة الصافية', icon: '🖤' },
+            { id: 'h10', category: 'hot', name: 'زنجبيل بحليب', price: 50, desc: 'مشروب دافئ ومنعش بالزنجبيل والحليب', icon: '🥛' },
+            { id: 'h11', category: 'hot', name: 'شاي كرك', price: 50, desc: 'شاي كرك بالهيل والحليب على الطريقة الأصيلة', icon: '🫖' },
+            { id: 'h12', category: 'hot', name: 'شاي', price: 25, desc: 'شاي أحمر ساخن ومضبوط', icon: '🍵' },
+            { id: 'h13', category: 'hot', name: 'أعشاب', price: 25, desc: 'تشكيلة أعشاب طبيعية دافئة ومريحة', icon: '🌿' },
+            { id: 'h14', category: 'hot', name: 'سحلب', price: 50, desc: 'سحلب ساخن بالقرفة والمكسرات', icon: '🥣' },
+            { id: 'h15', category: 'hot', name: 'إضافات حليب', price: 10, desc: 'إضافة حليب لأي مشروب ساخن', icon: '➕' },
+
+            // 2. المشروبات الباردة (Cold Drinks)
+            { id: 'c1', category: 'cold', name: 'رد بول (Red Bull)', price: 150, desc: 'مشروب الطاقة العالمي بارد ومنعش', icon: '⚡' },
+            { id: 'c2', category: 'cold', name: 'بوم بوم (Boom Boom)', price: 75, desc: 'مشروب طاقة بارد', icon: '🔋' },
+            { id: 'c3', category: 'cold', name: 'بي ام (BM)', price: 50, desc: 'مشروب طاقة منعش', icon: '🧊' },
+            { id: 'c4', category: 'cold', name: 'اكس (X)', price: 35, desc: 'مشروب غازي / طاقة بارد', icon: '❄️' },
+            { id: 'c5', category: 'cold', name: 'راز (Raz)', price: 25, desc: 'مشروب بارد منعش', icon: '🥤' },
+            { id: 'c6', category: 'cold', name: 'كيفا (Kiva)', price: 35, desc: 'مشروب بارد بنكهة مميزة', icon: '🥤' },
+            { id: 'c7', category: 'cold', name: 'بلدنا حليب', price: 50, desc: 'حليب بلدنا بارد وطازج', icon: '🥛' },
+            { id: 'c8', category: 'cold', name: 'مي 2 لتر', price: 25, desc: 'عبوة مياه كبيرة 2 لتر', icon: '💧' },
+            { id: 'c9', category: 'cold', name: 'مي 600 ملي', price: 25, desc: 'عبوة مياه باردة 600 مل', icon: '💧' },
+            { id: 'c10', category: 'cold', name: 'ماتركس (Matrix)', price: 25, desc: 'مشروب غازي بارد', icon: '🥫' },
+            { id: 'c11', category: 'cold', name: 'كناري', price: 35, desc: 'مشروب بارد ومنعش', icon: '🧃' },
+            { id: 'c12', category: 'cold', name: 'لونا قهوة مثلجة', price: 60, desc: 'آيس كوفي لونا بارد ومنعش', icon: '🧋' },
+
+            // 3. وجبات خفيفة (Snacks)
+            { id: 's1', category: 'snacks', name: 'إندومي', price: null, desc: 'نودلز ساخنة سريعة التحضير (اكتب النكهة بالملاحظات)', icon: '🍜' },
+            { id: 's2', category: 'snacks', name: 'ساندوش جوردينا جبنة شيدر', price: null, desc: 'ساندوش محشو بجبنة الشيدر اللذيذة', icon: '🥪' },
+            { id: 's3', category: 'snacks', name: 'ساندوش جوردينا شوكلاتة', price: null, desc: 'ساندوش محشو بكريمة الشوكولاتة', icon: '🍫' },
+            { id: 's4', category: 'snacks', name: 'كرواسون جبنة بيضاء', price: 35, desc: 'كرواسون هش بحشوة الجبنة البيضاء', icon: '🥐' },
+            { id: 's5', category: 'snacks', name: 'كرواسون جبنة شيدر', price: 35, desc: 'كرواسون طازج بحشوة جبنة الشيدر', icon: '🥐' },
+            { id: 's6', category: 'snacks', name: 'كب كيك مافن', price: 50, desc: 'كيك مافن طري وغني بالنكهة', icon: '🧁' },
+            { id: 's7', category: 'snacks', name: 'كب كيك رويال', price: 35, desc: 'كب كيك رويال خفيف ولذيذ', icon: '🧁' },
+            { id: 's8', category: 'snacks', name: 'كوكيز حبيبة', price: 50, desc: 'كوكيز مقرمش بقطع الشوكولاتة', icon: '🍪' },
+            { id: 's9', category: 'snacks', name: 'كوكيز ليو', price: 50, desc: 'كوكيز ليو اللذيذ مع القهوة', icon: '🍪' },
+            { id: 's10', category: 'snacks', name: 'تصبيرة', price: 25, desc: 'سناك خفيف وسريع', icon: '🥨' }
+        ];
+
+        const categoryMeta = {
+            hot: { title: 'المشروبات الساخنة', subtitle: 'قهوة تركية، نسكافيه، شاي ومشروبات دافئة', icon: 'fa-mug-hot' },
+            cold: { title: 'المشروبات الباردة', subtitle: 'مشروبات طاقة، عصائر، مياه وقهوة مثلجة', icon: 'fa-snowflake' },
+            snacks: { title: 'وجبات خفيفة وسناكات', subtitle: 'مخبوزات، كوكيز، ساندويشات وإندومي', icon: 'fa-cookie-bite' }
+        };
+
+        // App State
+        let cart = {}; // { itemId: quantity }
+        let currentCategory = 'all';
+
+        // Format Price Helper (Jordanian Qirsh / Dinar)
+        function formatPrice(qirsh) {
+            if (qirsh === null || qirsh === undefined) return 'حسب الطلب';
+            if (qirsh >= 100) {
+                const jd = (qirsh / 100).toFixed(2);
+                return `${jd} دينار`;
+            }
+            return `${qirsh} قرش`;
+        }
+
+        // Render Menu Sections & Cards
+        function renderMenu() {
+            const container = document.getElementById('menuContainer');
+            const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+            const clearBtn = document.getElementById('clearSearchBtn');
+            
+            clearBtn.classList.toggle('hidden', searchQuery.length === 0);
+
+            const filteredItems = menuItems.filter(item => {
+                const matchesCat = currentCategory === 'all' || item.category === currentCategory;
+                const matchesSearch = item.name.toLowerCase().includes(searchQuery) || item.desc.toLowerCase().includes(searchQuery);
+                return matchesCat && matchesSearch;
+            });
+
+            if (filteredItems.length === 0) {
+                container.innerHTML = '';
+                document.getElementById('emptyState').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('emptyState').classList.add('hidden');
+
+            // Group items by category
+            const categoriesToRender = currentCategory === 'all' ? ['hot', 'cold', 'snacks'] : [currentCategory];
+            let html = '';
+
+            categoriesToRender.forEach(catKey => {
+                const itemsInCat = filteredItems.filter(i => i.category === catKey);
+                if (itemsInCat.length === 0) return;
+
+                const meta = categoryMeta[catKey];
+                html += `
+                    <section class="space-y-3">
+                        <div class="flex items-center justify-between border-b-2 border-gold/40 pb-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-9 h-9 rounded-xl bg-espresso text-gold flex items-center justify-center shadow">
+                                    <i class="fa-solid ${meta.icon}"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-black text-lg text-espresso leading-tight">${meta.title}</h2>
+                                    <p class="text-[11px] text-stone-500">${meta.subtitle}</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold bg-stone-200/80 text-stone-700 px-2.5 py-1 rounded-full">${itemsInCat.length} صنف</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            ${itemsInCat.map(item => createItemCard(item)).join('')}
+                        </div>
+                    </section>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Create Single Item Card HTML
+        function createItemCard(item) {
+            const qty = cart[item.id] || 0;
+            const priceLabel = formatPrice(item.price);
+            const isCustomPrice = item.price === null;
+
+            return `
+                <div class="bg-white rounded-2xl p-3.5 border ${qty > 0 ? 'border-gold ring-2 ring-gold/20' : 'border-stone-200/90'} shadow-sm hover:shadow-md transition flex items-center justify-between gap-3">
+                    <div class="flex items-start gap-3 flex-1 min-w-0">
+                        <div class="w-11 h-11 rounded-2xl bg-cream border border-stone-200 flex items-center justify-center text-2xl shrink-0">
+                            ${item.icon}
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <h3 class="font-extrabold text-sm sm:text-base text-espresso truncate">${item.name}</h3>
+                            <p class="text-[11px] text-stone-500 line-clamp-1 mt-0.5">${item.desc}</p>
+                            <div class="mt-1.5 inline-flex items-center">
+                                <span class="${isCustomPrice ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-espresso text-gold'} text-xs font-extrabold px-2.5 py-0.5 rounded-lg">
+                                    ${priceLabel}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quantity Controls -->
+                    <div class="shrink-0">
+                        ${qty === 0 ? `
+                            <button onclick="updateQty('${item.id}', 1)" class="bg-cream hover:bg-gold text-espresso border border-gold/60 font-bold text-xs px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 transition active:scale-95 shadow-sm">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>أضف</span>
+                            </button>
+                        ` : `
+                            <div class="flex items-center gap-2 bg-espresso text-white p-1 rounded-xl shadow">
+                                <button onclick="updateQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-gold text-espresso font-black flex items-center justify-center active:scale-90 transition">
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                </button>
+                                <span class="font-black text-sm min-w-[20px] text-center">${qty}</span>
+                                <button onclick="updateQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-white/15 hover:bg-terracotta text-white font-black flex items-center justify-center active:scale-90 transition">
+                                    <i class="fa-solid fa-minus text-xs"></i>
+                                </button>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Category Switching
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = 'cat-btn active shrink-0 px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-espresso text-gold border border-espresso transition';
+                } else {
+                    btn.className = 'cat-btn shrink-0 px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-stone-700 border border-stone-200 hover:border-gold transition';
+                }
+            });
+            renderMenu();
+        }
+
+        function filterMenu() {
+            renderMenu();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            renderMenu();
+        }
+
+        // Update Cart Quantity
+        function updateQty(id, delta) {
+            const current = cart[id] || 0;
+            const next = current + delta;
+            if (next <= 0) {
+                delete cart[id];
+            } else {
+                cart[id] = next;
+                if (delta > 0 && current === 0) {
+                    const item = menuItems.find(i => i.id === id);
+                    showToast(`تمت إضافة "${item.name}" للسلة`);
+                }
+            }
+            renderMenu();
+            updateCartUI();
+        }
+
+        // Update Floating Cart Bar & Modal State
+        function updateCartUI() {
+            const bar = document.getElementById('floatingCartBar');
+            const badge = document.getElementById('cartBadgeCount');
+            const totalDisplay = document.getElementById('cartTotalDisplay');
+            const subSummary = document.getElementById('cartSubSummary');
+
+            let totalItems = 0;
+            let totalQirsh = 0;
+            let hasCustomPrice = false;
+
+            Object.entries(cart).forEach(([id, qty]) => {
+                const item = menuItems.find(i => i.id === id);
+                if (item) {
+                    totalItems += qty;
+                    if (item.price !== null) {
+                        totalQirsh += item.price * qty;
+                    } else {
+                        hasCustomPrice = true;
+                    }
+                }
+            });
+
+            if (totalItems > 0) {
+                bar.classList.remove('translate-y-28', 'opacity-0', 'pointer-events-none');
+                badge.textContent = totalItems;
+                totalDisplay.textContent = formatPrice(totalQirsh) + (hasCustomPrice ? ' +' : '');
+                subSummary.textContent = `${totalItems} ${totalItems === 1 ? 'صنف' : 'أصناف'} في السلة • اضغط لإرسال الطلب`;
+            } else {
+                bar.classList.add('translate-y-28', 'opacity-0', 'pointer-events-none');
+                closeCartModal();
+            }
+
+            renderCartModalItems();
+        }
+
+        // Render Items Inside Cart Modal
+        function renderCartModalItems() {
+            const list = document.getElementById('cartItemsList');
+            const modalTotalItems = document.getElementById('modalTotalItems');
+            const modalTotalPrice = document.getElementById('modalTotalPrice');
+            const customNotice = document.getElementById('customPriceNotice');
+
+            let html = '';
+            let totalItems = 0;
+            let totalQirsh = 0;
+            let hasCustomPrice = false;
+
+            Object.entries(cart).forEach(([id, qty]) => {
+                const item = menuItems.find(i => i.id === id);
+                if (!item) return;
+
+                totalItems += qty;
+                if (item.price !== null) {
+                    totalQirsh += item.price * qty;
+                } else {
+                    hasCustomPrice = true;
+                }
+
+                const linePrice = item.price !== null ? formatPrice(item.price * qty) : 'يُحدد عند الطلب';
+
+                html += `
+                    <div class="bg-white p-3 rounded-xl border border-stone-200 flex items-center justify-between gap-2">
+                        <div class="min-w-0 flex-1">
+                            <h4 class="font-bold text-sm text-espresso truncate">${item.icon} ${item.name}</h4>
+                            <span class="text-xs font-semibold text-terracotta">${linePrice}</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-cream px-2 py-1 rounded-lg border border-stone-200">
+                            <button onclick="updateQty('${item.id}', 1)" class="w-6 h-6 rounded bg-espresso text-gold font-bold text-xs flex items-center justify-center">+</button>
+                            <span class="font-black text-sm w-5 text-center">${qty}</span>
+                            <button onclick="updateQty('${item.id}', -1)" class="w-6 h-6 rounded bg-stone-200 text-espresso font-bold text-xs flex items-center justify-center">-</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            list.innerHTML = html;
+            modalTotalItems.textContent = `${totalItems} صنف`;
+            modalTotalPrice.textContent = formatPrice(totalQirsh) + (hasCustomPrice ? ' + أصناف حسب الطلب' : '');
+            customNotice.classList.toggle('hidden', !hasCustomPrice);
+        }
+
+        function openCartModal() {
+            renderCartModalItems();
+            document.getElementById('cartModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCartModal() {
+            document.getElementById('cartModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function clearCart() {
+            cart = {};
+            renderMenu();
+            updateCartUI();
+        }
+
+        // Format & Send Order via WhatsApp
+        function sendOrderWhatsApp() {
+            const entries = Object.entries(cart);
+            if (entries.length === 0) return;
+
+            const customerName = document.getElementById('customerName').value.trim();
+            const orderNotes = document.getElementById('orderNotes').value.trim();
+
+            let totalQirsh = 0;
+            let hasCustom = false;
+            let messageLines = [
+                `مرحباً *قهوة نور* ☕✨`,
+                `أرغب بطلب الأصناف التالية:`,
+                `--------------------------`
+            ];
+
+            entries.forEach(([id, qty], index) => {
+                const item = menuItems.find(i => i.id === id);
+                if (!item) return;
+                const priceStr = item.price !== null ? formatPrice(item.price * qty) : 'حسب الطلب';
+                if (item.price !== null) {
+                    totalQirsh += item.price * qty;
+                } else {
+                    hasCustom = true;
+                }
+                messageLines.push(`${index + 1}. *${item.name}* × (${qty}) — ${priceStr}`);
+            });
+
+            messageLines.push(`--------------------------`);
+            messageLines.push(`💰 *المجموع التقريبي:* ${formatPrice(totalQirsh)}${hasCustom ? ' + أصناف حسب الطلب' : ''}`);
+
+            if (customerName) {
+                messageLines.push(`📍 *الاسم / الموقع:* ${customerName}`);
+            }
+            if (orderNotes) {
+                messageLines.push(`📝 *ملاحظات:* ${orderNotes}`);
+            }
+
+            const fullText = encodeURIComponent(messageLines.join('\n'));
+            const whatsappUrl = `https://wa.me/962788492145?text=${fullText}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // QR Code Modal Logic
+        function openQrModal() {
+            const modal = document.getElementById('qrModal');
+            const qrImg = document.getElementById('qrImage');
+            const currentUrl = encodeURIComponent(window.location.href);
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&color=1A1512&bgcolor=FFFFFF&data=${currentUrl}`;
+            modal.classList.remove('hidden');
+        }
+
+        function closeQrModal() {
+            document.getElementById('qrModal').classList.add('hidden');
+        }
+
+        // Copy Link using fallback-safe execCommand
+        function copyStoreLink() {
+            const tempInput = document.createElement('input');
+            tempInput.value = window.location.href;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            const label = document.getElementById('copyLinkText');
+            label.textContent = 'تم النسخ بنجاح!';
+            showToast('تم نسخ رابط متجر قهوة نور');
+            setTimeout(() => {
+                label.textContent = 'نسخ رابط المتجر';
+            }, 2500);
+        }
+
+        // Toast Helper
+        let toastTimeout;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('opacity-0', '-translate-y-10');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-10');
+            }, 2200);
+        }
+
+        // Initialize Page
+        window.addEventListener('DOMContentLoaded', () => {
+            renderMenu();
+        });
+    </script>
+</body>
+</html>
